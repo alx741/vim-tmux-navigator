@@ -76,7 +76,20 @@ function! s:TmuxAwareNavigate(direction)
     if g:tmux_navigator_save_on_switch
       update
     endif
-    let args = 'select-pane -' . tr(a:direction, 'phjkl', 'lLDUR')
+
+    if a:direction == "h"
+        let g:param = "left"
+    elseif a:direction == "j"
+        let g:param = "down"
+    elseif a:direction == "k"
+        let g:param = "up"
+    elseif a:direction == "l"
+        let g:param = "right"
+    endif
+
+    let args = "run '~/.scripts/ratpoison/rat_tmux-navigator.sh tmux " . g:param . "'"
+    let g:myarg = args
+
     silent call s:TmuxCommand(args)
     if s:NeedsVitalityRedraw()
       redraw!
